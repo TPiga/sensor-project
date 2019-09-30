@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  api:
+    build: ./api
+    command: yarn start:dev
+    volumes:
+      - ./api/src:/app/src
+      - ./api/tslint.json:/app/tslint.json
+      - ./api/tsconfig.json:/app/tsconfig.json
+      - ./api/nodemon.json:/app/nodemon.json
+      - ./api/prettierrc:/app/prettierrc
+    ports:
+      - "8000:8000"
+    environment:
+      - FRONTEND_URL=http://localhost:8000
+      - DEBUG=true
+    env_file:
+      - .env
+
+volumes:
+  db-data: {}
