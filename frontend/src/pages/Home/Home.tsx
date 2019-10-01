@@ -1,9 +1,10 @@
 import * as React from 'react';
 import io from 'socket.io-client';
-import { HomeContainer, Title, Container, DescriptionLine, DescriptionList } from './Home.style';
+import { HomeContainer, Title, Container, Body, SideBar } from './Home.style';
 import { getNumberOfMessages } from 'redux/Home';
 import { formatLineData, ILineData } from 'utilities/graph';
 import LineGraph from 'components/LineGraph';
+import { Button, Icon } from '@blueprintjs/core';
 
 interface IProps {
   getNumberOfMessages: typeof getNumberOfMessages.request;
@@ -39,9 +40,19 @@ class Home extends React.PureComponent<IProps, IState> {
     return (
       <HomeContainer>
         <Title>Welcome to my Challenge Project!</Title>
-        <Container>
-          <LineGraph data={formatLineData(this.state.currentData)} />
-        </Container>
+        <Body>
+          <Container>
+            <LineGraph data={formatLineData(this.state.currentData)} />
+          </Container>
+          <SideBar>
+            <Button icon="refresh" intent="danger" text="Reset" />
+            <Button icon="user" rightIcon="caret-down" text="Profile settings" />
+            <Button rightIcon="arrow-right" intent="success" text="Next step" />
+            <Button>
+              <Icon icon="document" /> Upload... <Icon icon="small-cross" />
+            </Button>
+          </SideBar>
+        </Body>
       </HomeContainer>
     );
   }

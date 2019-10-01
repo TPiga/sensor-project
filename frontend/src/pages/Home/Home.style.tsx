@@ -53,3 +53,18 @@ export const DescriptionLine = styled.li`
   margin-bottom: ${getSpacing(1)};
 `;
 DescriptionLine.displayName = 'DescriptionLine';
+
+export const Body = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+`;
+
+export const SideBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  > * + * {
+    margin-top: 20px;
+  }
+`;
