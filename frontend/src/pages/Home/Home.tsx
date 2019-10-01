@@ -12,7 +12,7 @@ class Home extends React.PureComponent<IProps> {
   currentSocket: SocketIOClient.Socket | null = null;
 
   componentDidMount() {
-    this.currentSocket = io(`http://localhost:8080/`, { path: '/websocket', secure: true });
+    this.currentSocket = io(`http://localhost:8080/devices`, { path: '/websocket', secure: true });
     this.currentSocket.on('message', (message: any) => console.log('message', message));
   }
 
