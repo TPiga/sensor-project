@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "3.5.1",
+    "@nivo/line": "^0.59.3",
     "@sentry/browser": "^5.4.3",
     "@types/socket.io-client": "^1.4.32",
     "babel-polyfill": "6.26.0",

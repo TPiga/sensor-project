@@ -33,6 +33,8 @@ export const Container = styled.div`
   box-sizing: border-box;
   border-radius: ${borderRadius.large};
   border: 1px dashed ${colorUsage.primaryTextColor};
+  width: 600px;
+  height: 400px;
 `;
 Container.displayName = 'Container';
 
