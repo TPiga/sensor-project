@@ -11,12 +11,14 @@ interface IProps {
 }
 
 interface IState {
+  currentIndex: number;
   currentData: ILineData;
 }
 
 class Home extends React.PureComponent<IProps, IState> {
   currentSocket: SocketIOClient.Socket | null = null;
   state = {
+    currentIndex: 0,
     // @ts-ignore
     currentData: [] as ILineData,
   };
@@ -25,7 +27,10 @@ class Home extends React.PureComponent<IProps, IState> {
     this.currentSocket = io(`http://localhost:8080/devices`, { path: '/websocket', secure: true });
     this.currentSocket.on('message', (message: any) =>
       this.setState({
-        currentData: [...this.state.currentData, { x: this.state.currentData.length, y: message }],
+        currentIndex: this.state.currentIndex + 1,
+        currentData: [...this.state.currentData, { x: this.state.currentIndex, y: message }].slice(
+          -5,
+        ),
       }),
     );
   }
