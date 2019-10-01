@@ -1,19 +1,6 @@
-import Koa from 'koa';
-import Router from 'koa-router';
-import cors from '@koa/cors';
+import http from 'http';
+import socketIO from 'socket.io';
 
-import { addEndpoints } from 'routes';
-
-// Koa set-up
-const app = new Koa();
-const koaRouter = new Router();
-
-app.use(cors());
-
-// Routing
-addEndpoints(koaRouter);
-
-app.use(koaRouter.routes());
-
-// Listen for requests
-app.listen(8000);
+var server = http.createServer();
+server.listen(8080);
+var io = socketIO(server, { path: '/websocket', pingTimeout: 60000 });

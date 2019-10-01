@@ -11,9 +11,9 @@ services:
       - ./api/nodemon.json:/app/nodemon.json
       - ./api/prettierrc:/app/prettierrc
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
-      - FRONTEND_URL=http://localhost:8000
+      - FRONTEND_URL=http://localhost:8080
       - DEBUG=true
     env_file:
       - .env

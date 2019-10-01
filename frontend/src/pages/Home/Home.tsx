@@ -1,4 +1,5 @@
 import * as React from 'react';
+import io from 'socket.io-client';
 import { HomeContainer, Title, Container, DescriptionLine, DescriptionList } from './Home.style';
 import { getNumberOfMessages } from 'redux/Home';
 
@@ -8,8 +9,11 @@ interface IProps {
 }
 
 class Home extends React.PureComponent<IProps> {
+  currentSocket: SocketIOClient.Socket | null = null;
+
   componentDidMount() {
-    this.props.getNumberOfMessages();
+    this.currentSocket = io(`http://localhost:8080/`, { path: '/websocket', secure: true });
+    this.currentSocket.on('message', (message: any) => console.log('message', message));
   }
 
   render() {
