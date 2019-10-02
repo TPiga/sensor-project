@@ -13,7 +13,7 @@ class Satellite {
     this.location.long += this.velocity.long;
   };
 
-  constructor(socket: socketIO.Socket) {
+  constructor(socket: socketIO.Socket, id: number) {
     this.velocity = {
       lat: Math.random() * MAX_LATITUDE * SPEED_MULTIPLIER,
       long: Math.random() * MAX_LATITUDE * SPEED_MULTIPLIER,
@@ -22,8 +22,8 @@ class Satellite {
 
     setInterval(() => {
       this.move();
-      socket.emit('message', { id: 1, location: this.location });
-    }, 200);
+      socket.emit('message', { id, location: this.location });
+    }, 500);
   }
 }
 

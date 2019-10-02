@@ -27,6 +27,8 @@ const convertToCartesian = (longitude: number, latitude: number) => {
   return { x, y, z };
 };
 
+const NUMBER_OF_SATELLITES = 4;
+
 class Home extends React.PureComponent<IProps, IState> {
   currentSocket: SocketIOClient.Socket | null = null;
   state = {
@@ -35,16 +37,19 @@ class Home extends React.PureComponent<IProps, IState> {
     currentData: [] as ILineData,
   };
   globe: BABYLON.Mesh | null = null;
-  satellite: BABYLON.Mesh | null = null;
+  satellites: { [key: number]: BABYLON.Mesh | null } = {};
 
   componentDidMount() {
     this.currentSocket = io(`http://localhost:8080/devices`, { path: '/websocket', secure: true });
     this.currentSocket.on('message', (message: any) => {
       const position = convertToCartesian(message.location.lat, message.location.long);
-      if (this.satellite) {
-        this.satellite.position.x = position.x;
-        this.satellite.position.y = position.y;
-        this.satellite.position.z = position.z;
+
+      const satellite = this.satellites[message.id];
+
+      if (satellite) {
+        satellite.position.x = position.x;
+        satellite.position.y = position.y;
+        satellite.position.z = position.z;
       }
     });
   }
@@ -66,7 +71,9 @@ class Home extends React.PureComponent<IProps, IState> {
 
     // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
     this.globe = BABYLON.Mesh.CreateSphere('globe', 16, 8, scene);
-    this.satellite = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
+
+    for (var i = 0; i < 4; i++)
+      this.satellites[i] = BABYLON.Mesh.CreateSphere(`sphere${i}`, 16, 0.5, scene);
 
     engine.runRenderLoop(() => {
       if (scene) {
