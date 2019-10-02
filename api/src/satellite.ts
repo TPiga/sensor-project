@@ -14,9 +14,11 @@ class Satellite {
   };
 
   constructor(socket: socketIO.Socket, id: number) {
+    const latBaseVelocity = Math.random();
+
     this.velocity = {
-      lat: Math.random() * MAX_LATITUDE * SPEED_MULTIPLIER,
-      long: Math.random() * MAX_LATITUDE * SPEED_MULTIPLIER,
+      lat: latBaseVelocity * MAX_LATITUDE * SPEED_MULTIPLIER,
+      long: (1 - latBaseVelocity) * MAX_LONGITUDE * SPEED_MULTIPLIER,
     };
     this.location = { lat: Math.random() * MAX_LATITUDE, long: Math.random() * MAX_LONGITUDE };
 
