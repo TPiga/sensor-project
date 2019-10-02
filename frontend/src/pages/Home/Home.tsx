@@ -25,17 +25,13 @@ class Home extends React.PureComponent<IProps, IState> {
     // @ts-ignore
     currentData: [] as ILineData,
   };
+  satellite: BABYLON.Mesh | null = null;
 
   componentDidMount() {
     this.currentSocket = io(`http://localhost:8080/devices`, { path: '/websocket', secure: true });
-    this.currentSocket.on('message', (message: any) =>
-      this.setState({
-        currentIndex: this.state.currentIndex + 1,
-        currentData: [...this.state.currentData, { x: this.state.currentIndex, y: message }].slice(
-          -5,
-        ),
-      }),
-    );
+    this.currentSocket.on('message', (message: any) => {
+      this.satellite && (this.satellite.position.y = message.location.long);
+    });
   }
 
   onSceneMount = (e: SceneEventArgs) => {
@@ -54,7 +50,7 @@ class Home extends React.PureComponent<IProps, IState> {
     light.intensity = 0.7;
 
     // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
-    var sphere = BABYLON.Mesh.CreateSphere('sphere1', 32, 8, scene);
+    this.satellite = BABYLON.Mesh.CreateSphere('sphere1', 16, 8, scene);
 
     engine.runRenderLoop(() => {
       if (scene) {
