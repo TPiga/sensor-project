@@ -47,9 +47,6 @@ class Home extends React.PureComponent<IProps, IState> {
     // This targets the camera to scene origin
     camera.setTarget(BABYLON.Vector3.Zero());
 
-    // This attaches the camera to the canvas
-    camera.attachControl(canvas, true);
-
     // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
     var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
 
