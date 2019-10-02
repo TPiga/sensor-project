@@ -75,20 +75,16 @@ class Home extends React.PureComponent<IProps, IState> {
   render() {
     return (
       <HomeContainer>
-        <Title>Welcome to my Challenge Project!</Title>
-        <Body>
-          <Container>
-            <BabylonScene onSceneMount={this.onSceneMount} width={500} height={300} />
-          </Container>
-          <SideBar>
-            <Button icon="refresh" intent="danger" text="Reset" />
-            <Button icon="user" rightIcon="caret-down" text="Profile settings" />
-            <Button rightIcon="arrow-right" intent="success" text="Next step" />
-            <Button>
-              <Icon icon="document" /> Upload... <Icon icon="small-cross" />
-            </Button>
-          </SideBar>
-        </Body>
+        <BabylonScene onSceneMount={this.onSceneMount} width={800} height={696} />
+        <SideBar>
+          <Title>Welcome to my Challenge Project!</Title>
+          <Button icon="refresh" intent="danger" text="Reset" />
+          <Button icon="user" rightIcon="caret-down" text="Profile settings" />
+          <Button rightIcon="arrow-right" intent="success" text="Next step" />
+          <Button>
+            <Icon icon="document" /> Upload... <Icon icon="small-cross" />
+          </Button>
+        </SideBar>
       </HomeContainer>
     );
   }

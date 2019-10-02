@@ -11,9 +11,10 @@ import {
 
 export const HomeContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  padding: ${getSpacing(10)};
+  flex: 1;
+  align-items: flex-start;
 `;
 HomeContainer.displayName = 'HomeContainer';
 
