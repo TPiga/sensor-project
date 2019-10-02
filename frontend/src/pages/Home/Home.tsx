@@ -18,6 +18,15 @@ interface IState {
   currentData: ILineData;
 }
 
+const convertToCartesian = (longitude: number, latitude: number) => {
+  const r = 5;
+  const x = r * Math.cos(longitude) * Math.sin(latitude);
+  const y = r * Math.sin(longitude) * Math.sin(latitude);
+  const z = r * Math.cos(latitude);
+
+  return { x, y, z };
+};
+
 class Home extends React.PureComponent<IProps, IState> {
   currentSocket: SocketIOClient.Socket | null = null;
   state = {
@@ -25,12 +34,18 @@ class Home extends React.PureComponent<IProps, IState> {
     // @ts-ignore
     currentData: [] as ILineData,
   };
+  globe: BABYLON.Mesh | null = null;
   satellite: BABYLON.Mesh | null = null;
 
   componentDidMount() {
     this.currentSocket = io(`http://localhost:8080/devices`, { path: '/websocket', secure: true });
     this.currentSocket.on('message', (message: any) => {
-      this.satellite && (this.satellite.position.y = message.location.long);
+      const position = convertToCartesian(message.location.lat, message.location.long);
+      if (this.satellite) {
+        this.satellite.position.x = position.x;
+        this.satellite.position.y = position.y;
+        this.satellite.position.z = position.z;
+      }
     });
   }
 
@@ -50,7 +65,8 @@ class Home extends React.PureComponent<IProps, IState> {
     light.intensity = 0.7;
 
     // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
-    this.satellite = BABYLON.Mesh.CreateSphere('sphere1', 16, 8, scene);
+    this.globe = BABYLON.Mesh.CreateSphere('globe', 16, 8, scene);
+    this.satellite = BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene);
 
     engine.runRenderLoop(() => {
       if (scene) {
