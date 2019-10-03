@@ -1,6 +1,6 @@
 import * as React from 'react';
 import io from 'socket.io-client';
-import { HomeContainer, Title, Container, Body, SideBar } from './Home.style';
+import { HomeContainer, Title, Container, Body, SideBar, SideBarBody } from './Home.style';
 import { getNumberOfMessages } from 'redux/Home';
 import { formatLineData, ILineData } from 'utilities/graph';
 import LineGraph from 'components/LineGraph';
@@ -16,6 +16,7 @@ interface IProps {
 interface IState {
   currentIndex: number;
   currentData: ILineData;
+  currentSatellite: number | null;
 }
 
 const convertToCartesian = (longitude: number, latitude: number) => {
@@ -35,6 +36,7 @@ class Home extends React.PureComponent<IProps, IState> {
     currentIndex: 0,
     // @ts-ignore
     currentData: [] as ILineData,
+    currentSatellite: null,
   };
   globe: BABYLON.Mesh | null = null;
   satellites: { [key: number]: BABYLON.Mesh | null } = {};
@@ -72,8 +74,18 @@ class Home extends React.PureComponent<IProps, IState> {
     // Our built-in 'sphere' shape. Params: name, subdivs, size, scene
     this.globe = BABYLON.Mesh.CreateSphere('globe', 16, 8, scene);
 
-    for (var i = 0; i < 4; i++)
-      this.satellites[i] = BABYLON.Mesh.CreateSphere(`sphere${i}`, 16, 0.5, scene);
+    for (let i = 0; i < NUMBER_OF_SATELLITES; i++) {
+      const satellite = BABYLON.Mesh.CreateSphere(`sphere${i}`, 16, 0.5, scene);
+      satellite.actionManager = new BABYLON.ActionManager(scene);
+      satellite.actionManager.registerAction(
+        new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, () => {
+          console.log('i', i);
+          this.setState({ currentSatellite: i });
+        }),
+      );
+
+      this.satellites[i] = satellite;
+    }
 
     engine.runRenderLoop(() => {
       if (scene) {
@@ -88,12 +100,19 @@ class Home extends React.PureComponent<IProps, IState> {
         <BabylonScene onSceneMount={this.onSceneMount} width={800} height={696} />
         <SideBar>
           <Title>Welcome to my Challenge Project!</Title>
-          <Button icon="refresh" intent="danger" text="Reset" />
-          <Button icon="user" rightIcon="caret-down" text="Profile settings" />
-          <Button rightIcon="arrow-right" intent="success" text="Next step" />
-          <Button>
-            <Icon icon="document" /> Upload... <Icon icon="small-cross" />
-          </Button>
+          {this.state.currentSatellite !== null ? (
+            <SideBarBody>
+              <p>Current satellite ID: {this.state.currentSatellite}</p>
+              <Button icon="refresh" intent="danger" text="Reset" />
+              <Button icon="settings" rightIcon="caret-down" text="Settings" />
+              <Button rightIcon="arrow-right" intent="success" text="Next step" />
+              <Button>
+                <Icon icon="document" /> Upload... <Icon icon="small-cross" />
+              </Button>
+            </SideBarBody>
+          ) : (
+            <p>Click on a satellite to find out more.</p>
+          )}
         </SideBar>
       </HomeContainer>
     );

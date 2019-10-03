@@ -63,8 +63,14 @@ export const Body = styled.div`
 
 export const SideBar = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding: 20px;
+`;
+
+export const SideBarBody = styled.div`
+  display: flex;
+  flex-direction: column;
   > * + * {
     margin-top: 20px;
   }
