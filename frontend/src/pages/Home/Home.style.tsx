@@ -15,6 +15,7 @@ export const HomeContainer = styled.div`
   align-items: center;
   flex: 1;
   align-items: flex-start;
+  height: 100%;
 `;
 HomeContainer.displayName = 'HomeContainer';
 
@@ -66,12 +67,28 @@ export const SideBar = styled.div`
   flex: 1;
   flex-direction: column;
   padding: 20px;
+  height: 100%;
 `;
 
 export const SideBarBody = styled.div`
   display: flex;
+  flex: 1;
   flex-direction: column;
   > * + * {
     margin-top: 20px;
   }
+`;
+
+export const SideBarAlignTop = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  > * + * {
+    margin-top: 20px;
+  }
+`;
+
+export const SideBarAlignBottom = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

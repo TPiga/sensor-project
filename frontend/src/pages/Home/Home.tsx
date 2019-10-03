@@ -1,6 +1,15 @@
 import * as React from 'react';
 import io from 'socket.io-client';
-import { HomeContainer, Title, Container, Body, SideBar, SideBarBody } from './Home.style';
+import {
+  HomeContainer,
+  Title,
+  Container,
+  Body,
+  SideBar,
+  SideBarBody,
+  SideBarAlignTop,
+  SideBarAlignBottom,
+} from './Home.style';
 import { getNumberOfMessages } from 'redux/Home';
 import { formatLineData, ILineData } from 'utilities/graph';
 import LineGraph from 'components/LineGraph';
@@ -94,6 +103,8 @@ class Home extends React.PureComponent<IProps, IState> {
     });
   };
 
+  closeSidebar = () => this.setState({ currentSatellite: null });
+
   render() {
     return (
       <HomeContainer>
@@ -102,13 +113,15 @@ class Home extends React.PureComponent<IProps, IState> {
           <Title>Welcome to my Challenge Project!</Title>
           {this.state.currentSatellite !== null ? (
             <SideBarBody>
-              <p>Current satellite ID: {this.state.currentSatellite}</p>
-              <Button icon="refresh" intent="danger" text="Reset" />
-              <Button icon="settings" rightIcon="caret-down" text="Settings" />
-              <Button rightIcon="arrow-right" intent="success" text="Next step" />
-              <Button>
-                <Icon icon="document" /> Upload... <Icon icon="small-cross" />
-              </Button>
+              <SideBarAlignTop>
+                <p>Current satellite ID: {this.state.currentSatellite}</p>
+                <Button icon="refresh" intent="danger" text="Reset" />
+                <Button icon="settings" rightIcon="caret-down" text="Settings" />
+                <Button rightIcon="arrow-right" intent="success" text="Next step" />
+              </SideBarAlignTop>
+              <SideBarAlignBottom>
+                <Button icon="small-cross" onClick={this.closeSidebar} text={'Close'} />
+              </SideBarAlignBottom>
             </SideBarBody>
           ) : (
             <p>Click on a satellite to find out more.</p>
